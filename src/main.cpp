@@ -98,7 +98,37 @@ void Lift(char action, int time){
   }
 }
 
-void turn(char direction, int angle){
+void easingdrive(char direction, int speed, int distance){
+
+if(direction == 'F'){
+leftMotorA.resetRotation();
+  while(true) {
+    double currentInchesTravelled = leftMotorA.rotation(turns) * 3.14 * 4;
+    double completionFactor = (currentInchesTravelled/distance);
+    double easingFactor = getEasingFactor(EASE_IN_OUT_CUBIC, completionFactor);
+    Drivetrain.drive(forward, (speed * easingFactor), velocityUnits::pct);
+    if(completionFactor >= 1){break;};  
+  }
+  Drivetrain.stop();
+  }
+if(direction == 'R'){
+leftMotorA.resetRotation();
+  while(true) {
+    double currentInchesTravelled = leftMotorA.rotation(turns) * 3.14 * 4;
+    double completionFactor = (currentInchesTravelled/distance);
+    double easingFactor = getEasingFactor(EASE_IN_OUT_CUBIC, completionFactor);
+    Drivetrain.drive(reverse, (speed * easingFactor), velocityUnits::pct);
+    if(completionFactor * -1 >= 1){break;};  
+  }
+  Drivetrain.stop();
+  }
+
+
+}
+
+
+void turn(char direction, int speed, int angle){
+  Drivetrain.setTurnVelocity(speed, percent);
   if(direction == 'L'){
     int leftangle = angle * -1;
     Drivetrain.turnFor(leftangle, vex::degrees);
@@ -109,17 +139,15 @@ void turn(char direction, int angle){
 }
 void autonomous(void) {
 Claw('O');
-while(true) {
-double motorTurns = leftMotorA.rotation(turns) * 50;
-double completionFactor = (motorTurns/50);
-double easingFactor = getEasingFactor(EASE_IN_OUT_CUBIC, completionFactor);
-Drivetrain.drive(forward, (100 * easingFactor), velocityUnits::pct);
-if(completionFactor >= 1){break;};
-}
-drivestraight(5, 50);
+Drivetrain.setStopping(brake);
+easingdrive('F', 100, 50);
 Claw('C');
 Lift('D', 1);
-drivestraight(-22, 75);
+drivestraight(-21, 75);
+turn('R', 100, 130);
+easingdrive('R', 100, 28);
+Lift('U', 1);
+drivestraight(50, 100);
 }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
