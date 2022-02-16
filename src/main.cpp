@@ -98,7 +98,7 @@ void Lift(char action, int time){
   }
 }
 
-void easingdrive(char direction, int speed, int distance){
+void easingdrive(char direction, int speed, double distance){
 
 if(direction == 'F'){
 leftMotorA.resetRotation();
@@ -140,14 +140,15 @@ void turn(char direction, int speed, int angle){
 void autonomous(void) {
 Claw('O');
 Drivetrain.setStopping(brake);
-easingdrive('F', 100, 50);
+easingdrive('F', 100, 50.5);
 Claw('C');
 Lift('D', 1);
 drivestraight(-21, 75);
-turn('R', 100, 130);
-easingdrive('R', 100, 28);
+turn('R', 100, 126);
+easingdrive('R', 100, 29.5);
 Lift('U', 1);
 drivestraight(50, 100);
+//Stop looking at my code :)
 }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
